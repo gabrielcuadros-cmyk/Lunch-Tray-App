@@ -22,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.lunchtray.ui.OrderViewModel
 
 // Enum que define las rutas de la app y asocia cada pantalla con su título de los recursos de cadenas
@@ -38,7 +40,16 @@ enum class LunchTrayScreen(@StringRes val title: Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LunchTrayApp() {
-    // TODO: Create Controller and initialization
+    // Inicialización del controlador de navegación
+    val navController = rememberNavController()
+
+    // Obtención de la entrada actual en la pila de retroceso
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    // Determinación de la pantalla actual o valor por defecto (Start)
+    val currentScreen = LunchTrayScreen.valueOf(
+        backStackEntry?.destination?.route ?: LunchTrayScreen.Start.name
+    )
 
     // Create ViewModel
     val viewModel: OrderViewModel = viewModel()
